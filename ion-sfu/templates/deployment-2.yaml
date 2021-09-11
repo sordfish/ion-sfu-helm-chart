@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ion-sfu.fullname" . }}
+  labels:
+    {{- include "ion-sfu.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ion-sfu.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ion-sfu.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ion-sfu.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: foo
+            mountPath: "/etc/foo"
+            readOnly: true          
+          args:
+            - "-c /configs/sfu.toml"
+            - "-gaddr :50051"
+            - "-jaddr :7000"
+            - "-paddr :9876"
+            - "-maddr :8100"
+          ports:
+        {{- $examplePort := untilStep (int .Values.first) (int .Values.last) (int .Values.incrementBy) -}}
+          {{- range $index, $port := $examplePort }}
+            - name: port-{{ $index }}
+              containerPort: {{ $port }}
+              protocol: TCP
+          {{- end }}          
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 7000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 7000
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: foo
+          configMap:
+            name: myconfigmap
