@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ion-sfu.fullname" . }}
+data:
+  sfu.toml: |
+    [sfu]
+    ballast = 0
+    withstats = false
+
+    [router]
+    maxbandwidth = 1500
+    maxpackettrack = 500
+    audiolevelthreshold = 40
+    audiolevelinterval=1000
+    audiolevelfilter = 20
+
+    [router.simulcast]
+    bestqualityfirst = true
+    enabletemporallayer = false
+
+    [webrtc]
+    portrange = [5000, 5200]
+    sdpsemantics = "unified-plan"
+    mdns = true
+
+    [webrtc.candidates]
+
+
+    [webrtc.timeouts]
+    disconnected = 5
+    failed = 25
+    keepalive = 2
+
+    [turn]
+    enabled = true
+    realm = "ion"
+    address = "0.0.0.0:3478"
+
+    [turn.auth]
+    credentials = "pion=ion,pion2=ion2"
+
+    [log]
+    v = 2

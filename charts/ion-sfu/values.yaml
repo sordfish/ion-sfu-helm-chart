@@ -2,15 +2,18 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-sfu: 
+config: 
   ports:
     - name: json
       port: 7000
       protocol: TCP
     - name: grpc
       port: 50051
-      protocol: TCP      
-    - name: webrtc
+      protocol: TCP
+    - name: turn
+      port: 3478
+      protocol: UDP     
+    - name: webrtc-udp
       portRangeStart: 5000
       portRangeEnd: 5200
       protocol: UDP
@@ -22,7 +25,14 @@ image:
   repository: pionwebrtc/ion-sfu
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "v1.10.8-allrpc"
+  sidecar:
+    repository: envoyproxy/envoy
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.19.1"
+    volumemountpath: "/etc/envoy"
+
 
 imagePullSecrets: []
 nameOverride: ""

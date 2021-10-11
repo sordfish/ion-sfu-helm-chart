@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ion-sfu.fullname" . }}
+  labels:
+    {{- include "ion-sfu.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  {{- range .Values.config.ports }}
+    {{- if .portRangeStart }}
+      {{- $portrangeprotocol := .protocol }}
+      {{- $portrangename := .name }}
+      {{- range $i, $e := untilStep (int .portRangeStart) (int .portRangeEnd) 1 }}
+    - name: {{ $portrangename }}-{{ $e }}
+      targetPort: {{ $e }}
+      port: {{ $e }}
+      protocol: {{ $portrangeprotocol }}         
+      {{- end }}
+    {{- else}}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .port }}
+      protocol: {{ .protocol }}
+    {{- end }}
+  {{- end }}
+  selector:
+    {{- include "ion-sfu.selectorLabels" . | nindent 4 }}
