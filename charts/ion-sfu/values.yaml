@@ -26,12 +26,7 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1.10.8-allrpc"
-  sidecar:
-    repository: envoyproxy/envoy
-    pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "v1.19.1"
-    volumemountpath: "/etc/envoy"
+  volumemountpath: "/configs"
 
 
 imagePullSecrets: []

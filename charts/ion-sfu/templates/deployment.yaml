@@ -37,45 +37,15 @@ spec:
             - name: gaddr
               value: ":50051"
             - name: jaddr
-              value: ":17000"
+              value: ":7000"
             - name: paddr
               value: ":9876"
             - name: maddr
               value: ":8100"
-        - name: {{ .Chart.Name }}-envoy
-          image: "{{ .Values.image.sidecar.repository }}:{{ .Values.image.sidecar.tag }}"
-          imagePullPolicy: {{ .Values.image.sidecar.pullPolicy }}        
           volumeMounts:
-          - name: config
-            mountPath: {{ .Values.image.sidecar.volumemountpath }}
-            readOnly: true
-          - name: certs
-            mountPath: "/certs"
-            readOnly: true  
-          ports:
-          {{- range .Values.config.ports }}
-            {{- if .portRangeStart }}
-              {{- $portrangeprotocol := .protocol }}
-              {{- $portrangename := .name }}
-              {{- range $i, $e := untilStep (int .portRangeStart) (int .portRangeEnd) 1 }}
-            - name: {{ $portrangename }}-{{ $e }}
-              containerPort: {{ $e }}
-              protocol: {{ $portrangeprotocol }}         
-              {{- end }}
-            {{- else}}
-            - name: {{ .name }}
-              containerPort: {{ .port }}
-              protocol: {{ .protocol }}
-            {{- end }}
-          {{- end }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: 7000
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: 7000
+            - name: ion-sfu-config
+              mountPath: {{ .Values.image.volumemountpath }}
+              readOnly: true              
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -92,22 +62,11 @@ spec:
       {{- end }}
       volumes:
         # You set volumes at the Pod level, then mount them into containers inside that Pod
-        - name: config
+        - name: ion-sfu-config
           configMap:
             # Provide the name of the ConfigMap you want to mount.
-            name: {{ include "ion-sfu.fullname" . }}-envoy
+            name: {{ include "ion-sfu.fullname" . }}-configmap
             # An array of keys from the ConfigMap to create as files
             items:
-            - key: "envoy.yaml"
-              path: "envoy.yaml"
-        - name: certs
-          secret:
-            secretName: {{ include "ion-sfu.fullname" . }}-tls-secret
-            items:
-            - key: tls.crt
-              path: tls.crt            
-            - key: tls.key
-              path: tls.key
-            - key: ca.crt
-              path: ca.crt
-                            
+            - key: "sfu.toml"
+              path: "sfu.toml"      
