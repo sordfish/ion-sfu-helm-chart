@@ -1,16 +1,20 @@
-# ion-sfu-helm-chart
-Helm Chart for https://hub.docker.com/r/pionwebrtc/ion-sfu/
+## Usage
 
+[Helm](https://helm.sh) must be installed to use the charts.  Please refer to
+Helm's [documentation](https://helm.sh/docs) to get started.
 
-# Example
+Once Helm has been set up correctly, add the repo as follows:
 
-docker run -p 7000:7000 -p 50051:50051 -p 5000-5200:5000-5200/udp pionwebrtc/ion-sfu:latest-allrpc -c /configs/sfu.toml -gaddr :50051 -jaddr :7000 -paddr :9876 -maddr :8100
+  helm repo add sordfish https://sordfish.github.io/ion-sfu
 
-7000
-50051
-5000-5200?
+If you had already added this repo earlier, run `helm repo update` to retrieve
+the latest versions of the packages.  You can then run `helm search repo
+sordfish` to see the charts.
 
-To be accessed as a service by other pods E.G. ion-sfu-gstreamer-send
+To install the ion-sfu chart:
 
+    helm install my-ion-sfu sordfish/ion-sfu
 
---dry-run=client
+To uninstall the chart:
+
+    helm delete my-ion-sfu
