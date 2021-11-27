@@ -4,6 +4,9 @@
 
 config: 
   ports:
+    - name: metrics
+      port: 8100
+      protocol: TCP    
     - name: json
       port: 7000
       protocol: TCP
