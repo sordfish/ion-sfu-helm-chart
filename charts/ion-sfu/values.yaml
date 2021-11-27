@@ -25,7 +25,7 @@ image:
   repository: pionwebrtc/ion-sfu
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.10.8-allrpc"
+  tag: "v1.10.10-allrpc"
   volumemountpath: "/configs"
 
 

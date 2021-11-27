@@ -6,7 +6,7 @@ data:
   sfu.toml: |
     [sfu]
     ballast = 0
-    withstats = false
+    withstats = true
 
     [router]
     maxbandwidth = 1500
