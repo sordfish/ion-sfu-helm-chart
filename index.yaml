@@ -3,6 +3,16 @@ entries:
   ion-sfu:
   - apiVersion: v2
     appVersion: 1.10.10
+    created: "2021-11-27T12:01:45.590486867Z"
+    description: A Helm chart for Ion SFU https://github.com/pion/ion-sfu
+    digest: ce31c6686fb181330cafe97929f70beb7953add6d05a7f4a1501e526e7f95db5
+    name: ion-sfu
+    type: application
+    urls:
+    - https://github.com/sordfish/ion-sfu-helm-chart/releases/download/ion-sfu-0.0.7/ion-sfu-0.0.7.tgz
+    version: 0.0.7
+  - apiVersion: v2
+    appVersion: 1.10.10
     created: "2021-11-27T11:23:59.427815653Z"
     description: A Helm chart for Ion SFU https://github.com/pion/ion-sfu
     digest: 16d40387ca5cb3a840e618e5f029c6eefec73830bd203042122d8d8900992e41
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/sordfish/ion-sfu-helm-chart/releases/download/ion-sfu-0.0.5/ion-sfu-0.0.5.tgz
     version: 0.0.5
-generated: "2021-11-27T11:23:59.427827953Z"
+generated: "2021-11-27T12:01:45.590611778Z"
