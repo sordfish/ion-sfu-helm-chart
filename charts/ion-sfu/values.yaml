@@ -13,14 +13,14 @@ config:
     - name: grpc
       port: 50051
       protocol: TCP
-    - name: turn
-      port: 3478
-      protocol: UDP     
     - name: webrtc-udp
       portRangeStart: 5000
       portRangeEnd: 5200
       protocol: UDP
-
+  turn:
+    - name: turn
+      port: 3478
+      protocol: UDP   
 
 replicaCount: 1
 
@@ -28,7 +28,7 @@ image:
   repository: pionwebrtc/ion-sfu
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.10.10-allrpc"
+  tag: "v1.11.0-allrpc"
   volumemountpath: "/configs"
 
 

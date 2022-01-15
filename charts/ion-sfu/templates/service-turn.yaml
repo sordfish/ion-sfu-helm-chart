@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ion-sfu.fullname" . }}-turn
+  labels:
+    {{- include "ion-sfu.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  {{- range .Values.config.turn }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .port }}
+      protocol: {{ .protocol }}
+  {{- end }}
+  selector:
+    {{- include "ion-sfu.selectorLabels" . | nindent 4 }}
